@@ -17,6 +17,10 @@ function createStore() {
     //pushing the callbacks in an array.
     const subscribe = (listener) => {
         listeners.push(listener)
+        //returning a function, which unsubscribe the callback function from the listeners array. 
+        return() => {
+             listeners = listeners.filter((l) => l !== listener)
+        }
     }
 
     return {
@@ -25,14 +29,22 @@ function createStore() {
     }
 
 }
+
 // creating an object name 'store' 
 const store = createStore()
+
 // invoking subscribe method on the object and passing a call back function
 store.subscribe(()=> {
     console.log("The new state is", store.getState)
 })
 
 // invoking subscribe method on the object and passing a call back function
-store.subscribe(()=> {
+// and catching the returned function in unsubscribe object 
+const unsubscribe  = store.subscribe(
+    //call back
+    ()=> {
     console.log("The state has been changed")
 })
+
+//invoking the function to get the callback out of the listeners array
+unsubscribe()
