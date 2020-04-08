@@ -13,7 +13,8 @@ function createStore() {
 
     //2.
     const getState = () => state
-
+    
+    //3.
     //pushing the callbacks in an array.
     const subscribe = (listener) => {
         listeners.push(listener)
