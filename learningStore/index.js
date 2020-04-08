@@ -44,9 +44,9 @@ const todos = (state = [], action) =>{
             return state.concat([action.todo])
         case 'REMOVE_TODO':
             return state.filter((todo) => todo.id !== action.id )
-        // case 'TOGGLE_TODO':
-        //     return state.map()
-         default:
+        case 'TOGGLE_TODO':
+            return state.map()
+        default:
             state
     }
 }
@@ -76,6 +76,53 @@ const store = createStore(app)
 store.subscribe(() => {
     console.log("The state is:",store.getState());
 })
+
+//Actions
+const ADD_TODO = 'ADD_TODO'
+const REMOVE_TODO = 'REMOVE_TODO'
+const TOGGLE_TODO = 'TOGGLE_TODO'
+const ADD_GOAL = 'ADD_GOAL'
+const REMOVE_GOAL = 'REMOVE_GOAL'
+
+
+
+
+//Action creators 
+const addTodoAction = (todo) => {
+    return {
+        type: 'ADD_TODO',
+        todo
+    }
+}
+
+const RemoveTodoAction = (id) => {
+    return {
+        type: 'REMOVE_TODO',
+        id
+    }
+}
+const toggleTodoAction = (status) => {
+    return {
+        type: 'TOGGLE_TODO',
+        status
+    }
+}
+
+
+const addGoalAction = (goal) => {
+    return {
+        type: 'ADD_GOAL',
+        goal
+    }
+}
+
+const removeGoalAction = (id) => {
+    return {
+        type: 'REMOVE_GOAL',
+        id
+    }
+}
+
 
 
 
