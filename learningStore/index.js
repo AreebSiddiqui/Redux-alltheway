@@ -39,17 +39,45 @@ function createStore(reducer) {
 }
 //Reducer function 
 const todos = (state = [], action) =>{
-    if (action.type === 'ADD_TODO') {
-        return state.concat([action.todo])
+    switch(action.type){
+        case  'ADD_TODO':
+            return state.concat([action.todo])
+        case 'REMOVE_TODO':
+            return state.filter((todo) => todo.id !== action.id )
+        // case 'TOGGLE_TODO':
+        //     return state.map()
+         default:
+            state
     }
-    return state
+}
+//Reducer function to maintain update goals state
+const goals = (state = [], action) =>{
+    switch(action.type){
+        case  'ADD_GOALS':
+            return state.concat([action.goal])
+        case 'REMOVE_GOAL':
+            return state.filter((goal) => goal.id !== action.id )
+        default:
+            state
+    }
 }
 
+const app = (state = {}, action) => {
+    return {
+        todos: {},
+        goals: {}
+
+    }
+}
+
+
 //passing the object to createStore function
-const store = createStore(todos)
+const store = createStore(app)
 store.subscribe(() => {
     console.log("The state is:",store.getState());
 })
+
+
 
 const action = {
     type: 'ADD_TODO',
