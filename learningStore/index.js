@@ -1,15 +1,16 @@
+//createStore is a function that we will download from NPM registry.
 //createStore() is a factory function 
-function createStore() {
+function createStore(reducer) {
     // 1. The State Tree.
     // 2. Get the state.
     // 3. listen for the changes in state and responding back.
     // 4. Update the state.
 
     //1.
-    const state
+    let state
     
     //array which stores all the call back functions passed in subscribe method when its invoked by the object 'store'.
-    const listeners  = []
+    let listeners  = []
 
     //2.
     const getState = () => state
@@ -23,29 +24,41 @@ function createStore() {
              listeners = listeners.filter((l) => l !== listener)
         }
     }
+    //4.
+    const dispatch = (action) => {
+        state = reducer(state,action)
+        listeners.forEach((listener) => listener());
+    }
 
     return {
         getState,
-        subscribe
+        subscribe,
+        dispatch
     }
 
 }
+//Reducer function 
+const todos = (state = [], action) =>{
+    if (action.type === 'ADD_TODO') {
+        return state.concat([action.todo])
+    }
+    return state
+}
 
-// creating an object name 'store' 
-const store = createStore()
-
-// invoking subscribe method on the object and passing a call back function
-store.subscribe(()=> {
-    console.log("The new state is", store.getState)
+//passing the object to createStore function
+const store = createStore(todos)
+store.subscribe(() => {
+    console.log("The state is:",store.getState());
 })
 
-// invoking subscribe method on the object and passing a call back function
-// and catching the returned function in unsubscribe object 
-const unsubscribe  = store.subscribe(
-    //call back
-    ()=> {
-    console.log("The state has been changed")
-})
+const action = {
+    type: 'ADD_TODO',
+    todo: {
+        id:0,
+        name: 'Learn Redux',
+        complete: false,
+    }
+};
 
-//invoking the function to get the callback out of the listeners array
-unsubscribe()
+store.dispatch(action);
+
