@@ -61,4 +61,5 @@ const action = {
 };
 
 store.dispatch(action);
-
+//State updated in the fashion demonstrated below.
+//createStore() -> store -> dispatch(action) -> todos(state, action) -> state
