@@ -39,6 +39,10 @@ function createStore(reducer) {
 }
 
 //APP CODE -> that the we as a developer will write
+//helper function to generate random `id`
+function generateId () {
+    return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+  }
 
 //Actions
 const ADD_TODO = 'ADD_TODO'
@@ -131,14 +135,33 @@ store.subscribe(() => {
     console.log("The state is:",store.getState());
 })
 
-
-store.dispatch(addTodoAction({
-        id:1,
-        name: 'learn Redux',
-        complete: false
+function addTodo() {
+    let input = document.getElementById('todo'); //`todo` is a input field name
+    let name = input.value 
+    let input = ''
+    store.dispatch(addTodoAction({
+        id:generateId(),
+        name,   
+        complete:false
     }))
+}
+function addGoal() {
+    let input = document.getElementById('goal'); //`goal` is a input field name
+    let name = input.value 
+    let input = ''
+    store.dispatch(addGoalAction({
+        id:generateId(),
+        name,   
+    }))
+}
 
-store.dispatch(toggleTodoAction(1))
+document.getElementById('todoBtn')
+    .addEventListener('Click',addTodo)
+
+document.getElementById('goalBtn')
+    .addEventListener('Click',addGoal)
 
 //State updated in the fashion demonstrated below.
 //createStore() -> store -> dispatch(action) -> todos(state, action) -> state
+
+//This code is moved in `index.html` under the script tag.
