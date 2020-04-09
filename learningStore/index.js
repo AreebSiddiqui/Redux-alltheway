@@ -37,45 +37,8 @@ function createStore(reducer) {
     }
 
 }
-//Reducer function 
-const todos = (state = [], action) =>{
-    switch(action.type){
-        case  'ADD_TODO':
-            return state.concat([action.todo])
-        case 'REMOVE_TODO':
-            return state.filter((todo) => todo.id !== action.id )
-        case 'TOGGLE_TODO':
-            return state.map()
-        default:
-            state
-    }
-}
-//Reducer function to maintain update goals state
-const goals = (state = [], action) =>{
-    switch(action.type){
-        case  'ADD_GOALS':
-            return state.concat([action.goal])
-        case 'REMOVE_GOAL':
-            return state.filter((goal) => goal.id !== action.id )
-        default:
-            state
-    }
-}
 
-const app = (state = {}, action) => {
-    return {
-        todos: {},
-        goals: {}
-
-    }
-}
-
-
-//passing the object to createStore function
-const store = createStore(app)
-store.subscribe(() => {
-    console.log("The state is:",store.getState());
-})
+//APP CODE -> that the we as a developer will write
 
 //Actions
 const ADD_TODO = 'ADD_TODO'
@@ -90,51 +53,92 @@ const REMOVE_GOAL = 'REMOVE_GOAL'
 //Action creators 
 const addTodoAction = (todo) => {
     return {
-        type: 'ADD_TODO',
+        type: ADD_TODO,
         todo
     }
 }
 
 const RemoveTodoAction = (id) => {
     return {
-        type: 'REMOVE_TODO',
+        type: REMOVE_TODO,
         id
     }
 }
-const toggleTodoAction = (status) => {
+const toggleTodoAction = (id) => {
     return {
-        type: 'TOGGLE_TODO',
-        status
+        type: TOGGLE_TODO,
+        id
     }
 }
 
 
 const addGoalAction = (goal) => {
     return {
-        type: 'ADD_GOAL',
+        type: ADD_GOAL,
         goal
     }
 }
 
 const removeGoalAction = (id) => {
     return {
-        type: 'REMOVE_GOAL',
+        type: REMOVE_GOAL,
         id
     }
 }
 
-
-
-
-const action = {
-    type: 'ADD_TODO',
-    todo: {
-        id:0,
-        name: 'Learn Redux',
-        complete: false,
+//Reducer function to maintain update todos state
+const todos = (state = [], action) =>{
+    switch(action.type){
+        case  'ADD_TODO':
+            return state.concat([action.todo])
+        case 'REMOVE_TODO':
+            return state.filter((todo) => todo.id !== action.id )
+        case 'TOGGLE_TODO':
+            return state.map((todo) => todo.id !== action.id ? todo : 
+                Object.assign({},todo, {complete: !todo.complete})
+            )
+        default:
+            state
     }
-};
+}
+//Reducer function to maintain update goals state
+const goals = (state = [], action) =>{
+    switch(action.type){
+        case  'ADD_GOAL':
+            return state.concat([action.goal])
+        case 'REMOVE_GOAL':
+            return state.filter((goal) => goal.id !== action.id )
+        default:
+            state
+    }
+}
 
-store.dispatch(action);
+// app() return both the function when invoked / we have to make this function as we can only pass
+// one parameter to the createStore(param) function, so we make a function which contain all 
+// our reducer functions and passed it as parameter to createStore() 
+const app = (state = {}, action) => {
+    return {
+        todos: todos(state.todos,action),
+        goals: goals(state.goals,action)
+
+    }
+}
+
+
+//passing the object to createStore function
+const store = createStore(app)
+store.subscribe(() => {
+    console.log("The state is:",store.getState());
+})
+
+
+store.dispatch(addTodoAction({
+        id:1,
+        name: 'learn Redux',
+        complete: false
+    }))
+
+store.dispatch(toggleTodoAction(1))
+
 //State updated in the fashion demonstrated below.
 //createStore() -> store -> dispatch(action) -> todos(state, action) -> state
